@@ -6,6 +6,6 @@ services:
     container_name: koreader-sync
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "8742:8742"
     volumes:
       - ./koreader.db:/app/koreader.db

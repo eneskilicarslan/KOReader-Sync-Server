@@ -9,7 +9,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8742;
 
 // Middleware
 app.use(morgan('dev'));
@@ -63,14 +63,12 @@ app.get('/api/books', (req, res) => {
     });
 });
 
-
-
-// Update book metadata (Title/Author/Cover) AND/OR Progress (Percentage)
+// Update book metadata (Title/Author/Cover)
 app.put('/api/books/:document_hash', (req, res) => {
     const { document_hash } = req.params;
-    const { title, authors, cover_url, percentage } = req.body;
+    const { title, authors, cover_url } = req.body;
 
-    if (!title && !authors && !cover_url && percentage === undefined) {
+    if (!title && !authors && !cover_url) {
         return res.status(400).json({ error: 'No fields to update' });
     }
 
@@ -80,7 +78,6 @@ app.put('/api/books/:document_hash', (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         if (!row) return res.status(404).json({ error: 'Book not found' });
 
-        // 1. Update Metadata (Title, Author, Cover)
         let metadata = {};
         try {
             metadata = JSON.parse(row.metadata || '{}');
@@ -92,51 +89,15 @@ app.put('/api/books/:document_hash', (req, res) => {
         if (authors) metadata.authors = authors;
         if (cover_url) metadata.cover_url = cover_url;
 
-        // Update metadata for the existing latest row (to keep display consistent)
-        // OR for all rows? For now, let's update the latest row so the UI reflects it immediately.
         const sqlUpdateMeta = `UPDATE progress SET metadata = ? WHERE id = ?`;
         db.run(sqlUpdateMeta, [JSON.stringify(metadata), row.id], function (err) {
-            if (err) console.error('Error updating metadata:', err);
-        });
-
-        // 2. Create NEW Progress Entry if percentage changed
-        if (percentage !== undefined && percentage !== '') {
-            const newPercentage = parseFloat(percentage) / 100; // Convert 50 to 0.5
-            // Add a 1-hour buffer to ensure this timestamp is always newer than any Kindle sync
-            const timestamp = Date.now() + (60 * 60 * 1000); // 1 hour in the future
-
-
-
-
-            // We reuse the existing progress_hash/page/epub_cfi because we don't know the real values for the new position.
-            // This is a "hack" to force the percentage update. The Kindle might get confused about the exact page, 
-            // but it should respect the percentage for the progress bar.
-            const sqlInsert = `
-                INSERT INTO progress (user_id, document_hash, progress_hash, timestamp, device, percentage, page, epub_cfi, metadata)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `;
-
-            db.run(sqlInsert, [
-                row.user_id,
-                document_hash,
-                row.progress_hash, // Reusing old hash (not ideal but necessary)
-                timestamp,
-                'WebAdmin',
-                newPercentage,
-                row.page, // Reusing old page
-                row.epub_cfi, // Reusing old CFI
-                JSON.stringify(metadata) // Use updated metadata
-            ], function (err) {
-                if (err) return res.status(500).json({ error: err.message });
-                res.json({ status: 'updated', metadata, new_progress: true });
-            });
-        } else {
+            if (err) return res.status(500).json({ error: err.message });
             res.json({ status: 'updated', metadata });
-        }
+        });
     });
 });
 
-// Delete a book (Superadmin)
+// Delete a book
 app.delete('/api/books/:document_hash', (req, res) => {
     const { document_hash } = req.params;
     db.run('DELETE FROM progress WHERE document_hash = ?', [document_hash], function (err) {
@@ -145,7 +106,7 @@ app.delete('/api/books/:document_hash', (req, res) => {
     });
 });
 
-// Rename device (Superadmin)
+// Rename device
 app.put('/api/devices/rename', (req, res) => {
     const { old_name, new_name } = req.body;
     if (!old_name || !new_name) return res.status(400).json({ error: 'Old and new names required' });
@@ -159,13 +120,10 @@ app.put('/api/devices/rename', (req, res) => {
 // Debug Sync Fetch
 app.get('/api/debug/fetch/:document_hash', (req, res) => {
     const { document_hash } = req.params;
-    // Simulate what the device would get
     const sql = `SELECT * FROM progress WHERE document_hash = ? ORDER BY timestamp DESC LIMIT 1`;
     db.get(sql, [document_hash], (err, row) => {
         if (err) return res.status(500).json({ error: err.message });
         if (!row) return res.status(404).json({ error: 'No data found' });
-
-        // Return raw row data for inspection
         res.json(row);
     });
 });
