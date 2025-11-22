@@ -1,20 +1,20 @@
 # KOReader Sync Server
 
-> **⚡ Vibecoded Project**: This entire project was created through AI-assisted development (vibecoding). No hard feelings if things break - it's all part of the vibe! 🚀
+> **Vibecoded Project**: This entire project was created through AI-assisted development (vibecoding). No hard feelings if things break - it's all part of the vibe.
 
 A self-hosted sync server for KOReader with a modern web dashboard for managing reading progress across devices.
 
-## ✨ Features
+## Features
 
-- **📚 Progress Sync**: Automatic sync between Kindle/Kobo and server
-- **🌐 Web Dashboard**: Modern dark-themed UI for managing books
-- **✏️ Metadata Editing**: Update title, author, and cover URLs
-- **🔧 Device Management**: Rename devices across all synced books
-- **🐛 Debug Tools**: Inspect raw sync data for troubleshooting
-- **🐳 Docker Ready**: Easy deployment with Docker Compose
-- **🔒 Secure**: User authentication with bcrypt password hashing
+- **Progress Sync**: Automatic sync between Kindle/Kobo and server
+- **Web Dashboard**: Modern dark-themed UI for managing books
+- **Metadata Editing**: Update title, author, and cover URLs
+- **Device Management**: Rename devices across all synced books
+- **Debug Tools**: Inspect raw sync data for troubleshooting
+- **Docker Ready**: Easy deployment with Docker Compose
+- **Secure**: User authentication with bcrypt password hashing
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Docker and Docker Compose (recommended)
@@ -24,8 +24,8 @@ A self-hosted sync server for KOReader with a modern web dashboard for managing 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/koreader-sync-server.git
-cd koreader-sync-server
+git clone https://github.com/eneskilicarslan/KOReader-Sync-Server.git
+cd KOReader-Sync-Server
 
 # Start with Docker
 docker-compose up -d
@@ -37,7 +37,7 @@ node server.js
 
 The server will be available at `http://YOUR_SERVER_IP:8742`
 
-## 📱 KOReader Configuration
+## KOReader Configuration
 
 1. **Open KOReader** on your device
 2. Go to **Settings** → **Network** → **Progress Sync**
@@ -48,7 +48,7 @@ The server will be available at `http://YOUR_SERVER_IP:8742`
 4. **Enable** Progress Sync
 5. Open a book and close it - it should sync!
 
-## 🎨 Web Dashboard
+## Web Dashboard
 
 Visit `http://YOUR_SERVER_IP:8742` to:
 - View all synced books with progress bars
@@ -57,32 +57,32 @@ Visit `http://YOUR_SERVER_IP:8742` to:
 - Debug sync issues
 - Delete books from sync database
 
-## 📖 Documentation
+## Documentation
 
 - [Walkthrough](walkthrough.md) - Complete feature guide
 - [TODO](TODO.md) - Planned features
 - [Contributing](CONTRIBUTING.md) - How to contribute
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Node.js, Express.js
 - **Database**: SQLite
 - **Frontend**: Vanilla JavaScript, CSS
 - **Deployment**: Docker, Docker Compose
 
-## ⚠️ Known Limitations
+## Known Limitations
 
 - Manual percentage updates from web UI don't sync to Kindle (requires EPUB parsing - see TODO.md)
 - Metadata editing works perfectly and persists across syncs
 
-## 📝 License
+## License
 
 MIT License - see [LICENSE](LICENSE) for details
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
-**Made with ✨ vibecoding** - Keep the vibe positive!
+**Made with vibecoding** - Keep the vibe positive!
