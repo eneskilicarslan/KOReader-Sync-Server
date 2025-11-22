@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOReader Sync Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>KOReader Sync Dashboard</h1>
+            <button class="btn-secondary" onclick="openDeviceModal()">Device Manager</button>
+        </header>
+        <main>
+            <div id="book-list" class="book-grid">
+                <!-- Books will be populated here -->
+                <p class="loading">Loading books...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-modal')">&times;</span>
+            <h2>Edit Book Details</h2>
+            <form id="edit-form">
+                <input type="hidden" id="edit-doc-hash">
+                <div class="form-group">
+                    <label for="edit-title">Title:</label>
+                    <input type="text" id="edit-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-author">Author:</label>
+                    <input type="text" id="edit-author">
+                </div>
+                <div class="form-group">
+                    <label for="edit-cover">Cover URL:</label>
+                    <input type="text" id="edit-cover" placeholder="https://example.com/cover.jpg">
+                </div>
+                <button type="submit" class="btn-save">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Device Manager Modal -->
+    <div id="device-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('device-modal')">&times;</span>
+            <h2>Device Manager</h2>
+            <div class="form-group">
+                <label for="device-old">Old Device Name:</label>
+                <input type="text" id="device-old" placeholder="e.g., KindleBasic4">
+            </div>
+            <div class="form-group">
+                <label for="device-new">New Device Name:</label>
+                <input type="text" id="device-new" placeholder="e.g., My Kindle">
+            </div>
+            <button class="btn-save" onclick="renameDevice()">Rename Device</button>
+        </div>
+    </div>
+
+    <!-- Debug Modal -->
+    <div id="debug-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('debug-modal')">&times;</span>
+            <h2>Sync Debug Info</h2>
+            <pre id="debug-content"
+                style="background: #333; padding: 10px; border-radius: 4px; overflow: auto; color: #0f0; max-height: 400px;"></pre>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

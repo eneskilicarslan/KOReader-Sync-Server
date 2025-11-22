@@ -1,0 +1,25 @@
+# Ignore database files
+*.db
+koreader.db
+sync.db
+
+# Ignore logs
+*.log
+debug.log
+
+# Ignore node modules
+node_modules/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore environment files
+.env
+.env.local
